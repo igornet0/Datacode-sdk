@@ -1,0 +1,7 @@
+# Minimal example: import native module and call one function.
+# Place libhello_module.dylib (or libhello_module.so) in the same directory
+# or in the current working directory, then run: datacode hello_world.dc
+
+import hello_module
+
+hello()

@@ -1,0 +1,6 @@
+# Test: only import, no call
+print("before import")
+import hello_module
+print("after import")
+hello()
+print("after hello")

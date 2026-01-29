@@ -1,0 +1,11 @@
+# Example: using a Telegram bot via a native module.
+# The Telegram module (e.g. from datacode_lib/gram_api or a separate ABI module)
+# would be loaded with: import telegram
+# Then you could register commands and handlers.
+#
+# import telegram
+# bot = create_bot(env("BOT_TOKEN"))
+# on_command("/start", fn() { send_message("Hello!") })
+# run_polling(bot)
+
+println("Telegram bot example: use a native 'telegram' module and uncomment the lines above.")
