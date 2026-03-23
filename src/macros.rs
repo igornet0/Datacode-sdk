@@ -37,13 +37,13 @@ macro_rules! define_module {
         use $crate::abi::{AbiVersion, DatacodeModule};
 
         static __DC_MODULE_NAME: std::sync::OnceLock<CString> = std::sync::OnceLock::new();
-        static __DC_MODULE_DESCRIPTOR: std::sync::OnceLock<*const DatacodeModule> = std::sync::OnceLock::new();
+        // `OnceLock<*const T>` is not `Sync` for raw pointers; store the struct (Send+Sync) instead.
+        static __DC_MODULE_DESCRIPTOR: std::sync::OnceLock<DatacodeModule> = std::sync::OnceLock::new();
 
         #[no_mangle]
         pub extern "C" fn datacode_module() -> *const DatacodeModule {
             let name = __DC_MODULE_NAME.get_or_init(|| CString::new($name).expect("module name contains null"));
-            *__DC_MODULE_DESCRIPTOR.get_or_init(|| {
-                Box::into_raw(Box::new(DatacodeModule {
+            (__DC_MODULE_DESCRIPTOR.get_or_init(|| DatacodeModule {
                     abi_version: AbiVersion {
                         major: $major,
                         minor: if $minor == 0 { 1 } else { $minor },
@@ -51,8 +51,7 @@ macro_rules! define_module {
                     name: name.as_ptr(),
                     export_table: std::ptr::null(),
                     register: Some($register_fn),
-                }))
-            })
+                })) as *const DatacodeModule
         }
     };
 }
@@ -69,8 +68,8 @@ macro_rules! define_module_descriptor {
         use $crate::abi::{AbiExport, AbiExportTable, AbiVersion, DatacodeModule};
 
         static __DC_MODULE_NAME: std::sync::OnceLock<CString> = std::sync::OnceLock::new();
-        static __DC_MODULE_DESCRIPTOR: std::sync::OnceLock<*const DatacodeModule> = std::sync::OnceLock::new();
-        static __DC_ABI_TABLE: std::sync::OnceLock<*const AbiExportTable> = std::sync::OnceLock::new();
+        static __DC_MODULE_DESCRIPTOR: std::sync::OnceLock<DatacodeModule> = std::sync::OnceLock::new();
+        static __DC_ABI_TABLE: std::sync::OnceLock<AbiExportTable> = std::sync::OnceLock::new();
 
         $crate::paste::paste! {
             $(
@@ -103,14 +102,12 @@ macro_rules! define_module_descriptor {
         #[no_mangle]
         pub extern "C" fn datacode_module() -> *const DatacodeModule {
             let name = __DC_MODULE_NAME.get_or_init(|| CString::new($name).expect("module name contains null"));
-            let table = *__DC_ABI_TABLE.get_or_init(|| {
-                Box::into_raw(Box::new(AbiExportTable {
-                    exports: __DC_EXPORTS.as_ptr(),
-                    exports_len: __DC_EXPORTS.len(),
-                }))
+            let table_ref = __DC_ABI_TABLE.get_or_init(|| AbiExportTable {
+                exports: __DC_EXPORTS.as_ptr(),
+                exports_len: __DC_EXPORTS.len(),
             });
-            *__DC_MODULE_DESCRIPTOR.get_or_init(|| {
-                Box::into_raw(Box::new(DatacodeModule {
+            let table = table_ref as *const AbiExportTable;
+            (__DC_MODULE_DESCRIPTOR.get_or_init(|| DatacodeModule {
                     abi_version: AbiVersion {
                         major: $major,
                         minor: if $minor == 0 { 1 } else { $minor },
@@ -118,8 +115,7 @@ macro_rules! define_module_descriptor {
                     name: name.as_ptr(),
                     export_table: table,
                     register: None,
-                }))
-            })
+                })) as *const DatacodeModule
         }
     };
 }
@@ -136,8 +132,7 @@ macro_rules! define_module_entry {
         use $crate::abi::{AbiExport, AbiModuleDescriptor, AbiVersion};
 
         static __DC_MODULE_NAME: std::sync::OnceLock<CString> = std::sync::OnceLock::new();
-        // Store a pointer: `OnceLock<AbiModuleDescriptor>` is not `Sync` (raw pointers in the struct).
-        static __DC_ROOT_DESC: std::sync::OnceLock<*const AbiModuleDescriptor> = std::sync::OnceLock::new();
+        static __DC_ROOT_DESC: std::sync::OnceLock<AbiModuleDescriptor> = std::sync::OnceLock::new();
 
         $crate::paste::paste! {
             $(
@@ -170,8 +165,7 @@ macro_rules! define_module_entry {
         #[no_mangle]
         pub extern "C" fn datacode_module_entry() -> *const AbiModuleDescriptor {
             let name = __DC_MODULE_NAME.get_or_init(|| CString::new($name).expect("module name contains null"));
-            *__DC_ROOT_DESC.get_or_init(|| {
-                let desc = AbiModuleDescriptor {
+            (__DC_ROOT_DESC.get_or_init(|| AbiModuleDescriptor {
                     abi_version: AbiVersion {
                         major: $major,
                         minor: if $minor == 0 { 2 } else { $minor },
@@ -183,9 +177,7 @@ macro_rules! define_module_entry {
                     classes_len: 0,
                     globals: std::ptr::null(),
                     globals_len: 0,
-                };
-                Box::into_raw(Box::new(desc))
-            })
+                })) as *const AbiModuleDescriptor
         }
     };
 }
