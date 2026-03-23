@@ -1,6 +1,6 @@
 [package]
 name = "datacode_sdk"
-version = "0.1.0"
+version = "1.1.1"
 edition = "2021"
 description = "SDK for writing DataCode native modules and plugins via ABI"
 license = "MIT"
@@ -12,6 +12,6 @@ name = "datacode_sdk"
 path = "src/lib.rs"
 
 [dependencies]
-datacode_abi = { git = "https://github.com/igornet0/Datacode-abi.git" }
+datacode_abi = { path = "datacode_abi" }
 libc = "0.2"
 paste = "1.0"
