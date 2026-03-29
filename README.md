@@ -10,6 +10,36 @@ SDK for writing **DataCode native modules and plugins** using the DataCode ABI. 
 - **C support** — `include/datacode.h` for writing plugins in C.
 - **Examples** — `hello_module` (Rust cdylib) and .dc scripts (`hello_world.dc`, `math_module.dc`, `telegram_bot.dc`).
 - **Tools** — `tools/build_abi.sh` to build a module and optionally copy the .so/.dylib.
+- **Artifact root (`DATACODE_DIST`)** — `module_dist::DIST_RUSTC_ENV`, macros `dist_rel_path!` / `dist_root!`; set via `build.rs` so packaging scripts know where to place `dist/` data (no hardcoded paths in the SDK).
+
+## Artifact directory (`DATACODE_DIST`)
+
+The SDK does **not** embed a fixed `dist/` path. Your module’s `build.rs` sets the **rustc** env var (name in `datacode_sdk::module_dist::DIST_RUSTC_ENV`, usually `DATACODE_DIST`):
+
+```toml
+[build-dependencies]
+datacode_sdk = { path = "..." }
+```
+
+```rust
+fn main() {
+    println!(
+        "cargo:rustc-env={}=dist",
+        datacode_sdk::module_dist::DIST_RUSTC_ENV
+    );
+    println!("cargo:rerun-if-changed=build.rs");
+}
+```
+
+Then in library code (expanded in **your** crate, not in the SDK):
+
+```rust
+use datacode_sdk::dist_rel_path;
+
+const DATA: &str = dist_rel_path!("/datasets/mnist/train-images.idx3-ubyte");
+```
+
+Use `dist_root!()` for the root segment only. Copy datasets and other files into `{manifest_dir}/{value}/...` during your Makefile or CI step.
 
 ## Quick start (Rust module)
 
@@ -47,7 +77,7 @@ SDK for writing **DataCode native modules and plugins** using the DataCode ABI. 
 
 ## Layout
 
-- **src/** — library: `abi`, `types`, `context`, `macros`.
+- **src/** — library: `abi`, `types`, `context`, `macros`, `module_dist` (`DATACODE_DIST`, `dist_rel_path!`, `dist_root!`).
 - **include/** — `datacode.h` for C plugins.
 - **examples/** — `hello_module/` (Rust), `hello_world.dc`, `math_module.dc`, `telegram_bot.dc`.
 - **tools/** — `build_abi.sh`, `gen_bindings.rs` (stub).

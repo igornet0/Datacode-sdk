@@ -11,6 +11,8 @@ pub mod abi;
 pub mod types;
 pub mod context;
 pub mod macros;
+/// Переменная rustc `DATACODE_DIST` и макросы путей артефактов (`dist_rel_path!`, `dist_root!`).
+pub mod module_dist;
 
 pub use abi::*;
 pub use types::*;
