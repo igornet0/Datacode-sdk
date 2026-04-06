@@ -1,10 +1,13 @@
-//! Stub for generating DataCode binding files from registered native functions.
+//! Optional tool: generate DataCode `.dc` binding stubs from manifests or Rust sources.
 //!
-//! Future: parse a Rust module or a manifest and emit a .dc file that
-//! re-exports or wraps the native functions (e.g. for documentation or
-//! type hints). Optionally integrate with build_abi.sh.
+//! **Status:** intentionally unimplemented. The project does not rely on this binary;
+//! keep manual `.dc` wrappers or extend this crate when you want codegen.
+//!
+//! Related: `tools/build_abi.sh`, `datacode_sdk/docs/examples.md`, and the ABI types in
+//! `datacode_sdk/datacode_abi`.
 
 fn main() {
-    // Placeholder: no-op. See docs/examples.md for manual binding patterns.
-    eprintln!("gen_bindings: stub. Generate .dc bindings manually or extend this tool.");
+    eprintln!(
+        "gen_bindings: not implemented. Build modules with datacode_sdk + datacode_abi; see datacode_sdk/docs/ABI.md."
+    );
 }

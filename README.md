@@ -80,15 +80,16 @@ Use `dist_root!()` for the root segment only. Copy datasets and other files into
 - **src/** — library: `abi`, `types`, `context`, `macros`, `module_dist` (`DATACODE_DIST`, `dist_rel_path!`, `dist_root!`).
 - **include/** — `datacode.h` for C plugins.
 - **examples/** — `hello_module/` (Rust), `hello_world.dc`, `math_module.dc`, `telegram_bot.dc`.
-- **tools/** — `build_abi.sh`, `gen_bindings.rs` (stub).
-- **docs/** — `ABI.md`, `modules.md`, `examples.md`.
+- **tools/** — `build_abi.sh`, `gen_bindings.rs` (optional placeholder; not required for builds).
+- **docs/** — index [docs/README.md](docs/README.md) (RU + links to EN); [docs/en/](docs/en/) (English); [docs/ru/](docs/ru/) (Russian).
 
 ## Documentation
 
-- [ABI.md](docs/ABI.md) — contract, types, versioning, entry point.
-- [modules.md](docs/modules.md) — how to write a module in Rust or C and load it.
-- [examples.md](docs/examples.md) — description of the included examples.
+- [docs/README.md](docs/README.md) — Russian index and links to English pages.
+- [ENREADME.md](docs/ENREADME.md) — short English overview.
+- English: [ABI](docs/en/ABI.md), [modules](docs/en/modules.md), [examples](docs/en/examples.md).
+- Russian: [ABI](docs/ru/ABI.md), [modules](docs/ru/modules.md), [examples](docs/ru/examples.md).
 
 ## ABI version
 
-The VM and modules must use the same ABI **major** version; module **minor** must be ≤ VM minor. Current: **1.0**.
+The VM and modules must use the same ABI **major** version; module **minor** must be ≤ VM minor. The canonical value is `datacode_abi::DATACODE_ABI_VERSION` (currently **1.7**). See [docs/en/ABI.md](docs/en/ABI.md) or [docs/ru/ABI.md](docs/ru/ABI.md).

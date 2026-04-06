@@ -1,8 +1,16 @@
 /**
- * DataCode ABI — C header for native modules.
- * Layout must match the Rust repr(C) types in datacode_abi.
+ * DataCode ABI — C header for native modules (LEGACY SUBSET).
  *
- * Usage:
+ * This file documents an early, small C view of the ABI. The authoritative layout and
+ * version live in the Rust crate `datacode_abi` (repo: datacode_sdk/datacode_abi).
+ * It includes additional `AbiValue` variants (PluginOpaque, Table, Bytes), module
+ * entry via `datacode_module_entry` / `AbiModuleDescriptor`, and descriptor tables
+ * not fully spelled out here.
+ *
+ * For new plugins, prefer `datacode_sdk` (Rust) or copy `#[repr(C)]` structs from
+ * `datacode_abi` when implementing in C.
+ *
+ * Legacy usage (still supported by the VM):
  * 1. Implement datacode_module() returning a pointer to a static DatacodeModule.
  * 2. In register(DatacodeVmContext*), call register_native for each exported function.
  * 3. Build as .so / .dylib / .dll; VM loads lib<name>.so and resolves "datacode_module".
