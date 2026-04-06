@@ -2,7 +2,7 @@
 
 pub use datacode_abi::{
     abi_compatible, AbiClassDescriptor, AbiExport, AbiExportTable, AbiGlobalDescriptor,
-    AbiModuleDescriptor, DatacodeError, DatacodeModule, DatacodeModuleEntryFn, DatacodeModuleFn,
-    DatacodeModuleLegacy, NativeAbiFn, NativeHandle, VmContext, AbiValue, AbiVersion,
-    DATACODE_ABI_VERSION, DATACODE_MODULE_ENTRY_SYMBOL, DATACODE_MODULE_SYMBOL,
+    AbiModuleDescriptor, AbiValue, AbiVersion, DatacodeError, DatacodeModule,
+    DatacodeModuleEntryFn, DatacodeModuleFn, DatacodeModuleLegacy, NativeAbiFn, NativeHandle,
+    VmContext, DATACODE_ABI_VERSION, DATACODE_MODULE_ENTRY_SYMBOL, DATACODE_MODULE_SYMBOL,
 };

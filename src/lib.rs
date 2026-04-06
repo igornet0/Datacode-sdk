@@ -8,14 +8,14 @@
 //! See the `datacode_abi` crate docs for version and layout rules.
 
 pub mod abi;
-pub mod types;
 pub mod context;
 pub mod macros;
 /// Переменная rustc `DATACODE_DIST` и макросы путей артефактов (`dist_rel_path!`, `dist_root!`).
 pub mod module_dist;
+pub mod types;
 
 pub use abi::*;
-pub use types::*;
 pub use context::ModuleContext;
+pub use types::*;
 // Macros use paste internally; re-export so macro expansions resolve.
 pub use paste;

@@ -38,20 +38,22 @@ macro_rules! define_module {
 
         static __DC_MODULE_NAME: std::sync::OnceLock<CString> = std::sync::OnceLock::new();
         // `OnceLock<*const T>` is not `Sync` for raw pointers; store the struct (Send+Sync) instead.
-        static __DC_MODULE_DESCRIPTOR: std::sync::OnceLock<DatacodeModule> = std::sync::OnceLock::new();
+        static __DC_MODULE_DESCRIPTOR: std::sync::OnceLock<DatacodeModule> =
+            std::sync::OnceLock::new();
 
         #[no_mangle]
         pub extern "C" fn datacode_module() -> *const DatacodeModule {
-            let name = __DC_MODULE_NAME.get_or_init(|| CString::new($name).expect("module name contains null"));
+            let name = __DC_MODULE_NAME
+                .get_or_init(|| CString::new($name).expect("module name contains null"));
             (__DC_MODULE_DESCRIPTOR.get_or_init(|| DatacodeModule {
-                    abi_version: AbiVersion {
-                        major: $major,
-                        minor: if $minor == 0 { 1 } else { $minor },
-                    },
-                    name: name.as_ptr(),
-                    export_table: std::ptr::null(),
-                    register: Some($register_fn),
-                })) as *const DatacodeModule
+                abi_version: AbiVersion {
+                    major: $major,
+                    minor: if $minor == 0 { 1 } else { $minor },
+                },
+                name: name.as_ptr(),
+                export_table: std::ptr::null(),
+                register: Some($register_fn),
+            })) as *const DatacodeModule
         }
     };
 }

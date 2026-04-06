@@ -1,3 +1,4 @@
 [submodule "datacode_abi"]
 	path = datacode_abi
 	url = https://github.com/igornet0/Datacode-abi.git
+	branch = main

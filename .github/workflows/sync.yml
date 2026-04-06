@@ -1,0 +1,30 @@
+name: Update Submodule
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"  # каждые 10 минут
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo with submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Update submodule
+        run: |
+          git submodule update --remote --merge
+
+      - name: Commit changes
+        run: |
+          git config user.name "igornet0"
+          git config user.email "igornet0@users.noreply.github.com"
+          git add .
+          git commit -m "Auto-update submodule" || echo "No changes"
+
+      - name: Push
+        run: git push
