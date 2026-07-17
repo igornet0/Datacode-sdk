@@ -4,7 +4,7 @@
 
 ## Жизненный цикл вызова (VM → ABI)
 
-Полный путь от байткода через `AbiValue` к вашей нативной функции и обратно описан в документе репозитория: [`docs/native_call_lifecycle.md`](../../../docs/native_call_lifecycle.md).
+Полный путь от байткода через `AbiValue` к вашей нативной функции и обратно описан в документации репозитория: [Жизненный цикл вызова](https://github.com/igornet0/DataCode/blob/main/docs/ru/200-разработчикам/native-call-lifecycle.md).
 
 ## Rust (с datacode_sdk)
 

@@ -4,7 +4,7 @@ How to implement a DataCode native module in Rust or C and use it from .dc code.
 
 ## Call lifecycle (VM → ABI)
 
-For the full path from bytecode through `AbiValue` to your native function and back, see the repo doc: [`docs/native_call_lifecycle.md`](../../docs/native_call_lifecycle.md).
+For the full path from bytecode through `AbiValue` to your native function and back, see [Native Call Lifecycle](https://github.com/igornet0/DataCode/blob/main/docs/en/200-developers/native_call_lifecycle.md).
 
 ## Rust (with datacode_sdk)
 
